@@ -12,4 +12,27 @@ servers:
     description: The Production Server
   - url: http://playground.api.bookshelf.com 
     description: The test server where you can play around
-paths: {}
+paths:
+  /books:
+    get:
+      operationId: listBooks
+      summary: List all books
+      responses: 
+        "200":
+          description: OK
+          content: 
+            application/json: 
+              schema: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    bookId:
+                      type: string
+                    name:
+                      type: string
+                    releaseDate:
+                      type: string
+                      format: date
+        "400":
+          description: Bad Request
