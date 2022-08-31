@@ -142,6 +142,48 @@ paths:
           description: OK
         "404":
           $ref: "#/components/responses/BookNotFound"
+  /books/upload-cover:
+    servers: 
+      - url: https://storage-eu.bookshelf.com
+        description: The Storage Backend
+    post: 
+      operationId: uploadCover
+      summary: Upload a book cover to the storage
+      tags: 
+        - books
+      requestBody: 
+        content:
+          img/png:
+            schema: 
+              type: string
+              contentEncoding: base64
+          multipart/form-data:
+            schema: 
+              type: object
+              properties:
+                file:
+                  type: string
+                  contentEncoding: base64
+                bookId:
+                  type: string
+                editionNumber:
+                  type: string
+                successUrl:
+                  type: string
+                  format: uri
+                failedUrl:
+                  type: string
+                  format: uri
+      responses: 
+        "200":
+          description: Upload request complete
+        "400":
+          description: Bad Request
+        "522":
+          description: Timeout
+        "401":
+          description: OAuth2 Security failed
+          $ref: '#/components/responses/UnauthorizedResponse' 
 components: 
   schemas:
     Book:
