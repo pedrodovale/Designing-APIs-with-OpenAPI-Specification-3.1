@@ -16,7 +16,7 @@ tags:
   - name: books
     description: Operations on books
 security: 
-  - {}
+  - GlobalSecurity: []
 paths:
   /books:
     get:
@@ -24,6 +24,7 @@ paths:
       summary: List all books
       tags: 
         - public
+      security: []
       responses: 
         "200":
           description: OK
@@ -190,4 +191,8 @@ components:
         application/json: 
           schema: 
             $ref: "#/components/schemas/Book"
-  securitySchemes: {}
+  securitySchemes:
+    GlobalSecurity:
+      type: http
+      description: Global security for all the endpoints
+      scheme: Basic 
