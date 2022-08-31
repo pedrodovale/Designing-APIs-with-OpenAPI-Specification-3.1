@@ -15,7 +15,7 @@ servers:
 tags: 
   - name: books
     description: Operations on books
-security: 
+security:
   - GlobalSecurity: []
 paths:
   /books:
@@ -60,8 +60,7 @@ paths:
           headers:
             Location:
               schema: 
-                type: string
-                format: uri
+                $ref: "#/components/schemas/Location"
           links:
             GetBook:
               operationId: getBookInfo
@@ -184,6 +183,36 @@ paths:
         "401":
           description: OAuth2 Security failed
           $ref: '#/components/responses/UnauthorizedResponse' 
+      callbacks:
+        uploadFinished:
+          $request.body#/successUrl:
+            get: 
+              operationId: uploadSuccess
+              summary: Callback for a successful book cover upload
+              security: 
+                - GlobalSecurity: []
+              parameters: 
+                - name: Location
+                  in: header
+                  schema:
+                    $ref: "#/components/schemas/Location"
+        uploadFailed:
+          $request.body#/failedUrl:
+            post:
+              operationId: uploadFailed
+              summary: Callback for a failed book cover upload
+              requestBody: 
+                content:
+                  application/json:
+                    schema: 
+                      type: object
+                      properties:
+                        error:
+                          type: string
+                          enum:
+                            - max_size_exceeded
+                        errorDescription:
+                          type: string
 components: 
   schemas:
     Book:
@@ -244,6 +273,9 @@ components:
       required: 
         - name
         - releaseDate
+    Location:
+      type: string
+      format: uri
   headers:
     UnauthorizedHeader:
       schema: 
