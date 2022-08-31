@@ -115,6 +115,8 @@ paths:
       description: "~Removes~ the info about **a book** and all *related data* `permanently`"
       tags: 
         - books
+      security: 
+        - OidcSecurity: []
       responses: 
         "200":
           description: OK
@@ -233,3 +235,6 @@ components:
           scopes:
             books:read: Operations on books that do not change the bookshelf
             books:write: Operations on books to make changes to the bookshelf
+    OidcSecurity:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.bookshelf.com
