@@ -1,0 +1,15 @@
+openapi: 3.1.0
+info: 
+  title: The Bookshelf API
+  version: "1.0"
+  summary: An API to keep track of Books
+  description: This is an API for keeping track of books
+  license: 
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers: 
+  - url: http://api.bookshelf.com
+    description: The Production Server
+  - url: http://playground.api.bookshelf.com 
+    description: The test server where you can play around
+paths: {}
