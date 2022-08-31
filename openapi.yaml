@@ -15,8 +15,22 @@ servers:
 tags: 
   - name: books
     description: Operations on books
-security:
+  - name: notifications
+    description: Notifications of shelf changes
+security: 
   - GlobalSecurity: []
+webhooks:
+  NotifyNewBook:
+    get: 
+      operationId: notifyNewBook
+      summary: Notifies clients of a new book in the shelf
+      tags: 
+        - notifications
+      parameters: 
+        - name: Location
+          in: header
+          schema: 
+            $ref: "#/components/schemas/Location"
 paths:
   /books:
     get:
@@ -213,6 +227,29 @@ paths:
                             - max_size_exceeded
                         errorDescription:
                           type: string
+  /books/subscribe:
+    post: 
+      operationId: subscribeNewBook
+      summary: Subscribe to receive a notification when a new book is added to the shelf
+      tags: 
+        - notifications
+      requestBody: 
+        content: 
+          application/json: 
+            schema: 
+              type: object
+              properties:
+                authorId:
+                  type: string
+                  format: uuid
+                publishUrl:
+                  type: string
+                  format: uri
+      responses: 
+        "200":
+          description: OK
+        "404":
+          description: Author not found
 components: 
   schemas:
     Book:
