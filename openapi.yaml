@@ -49,6 +49,9 @@ paths:
       summary: Add a new book
       tags: 
         - books
+      security:
+        - ApiKeySecurity: []
+        - GlobalSecurity: []
       requestBody: 
         $ref: "#/components/requestBodies/BookRequest"
       responses: 
@@ -59,6 +62,8 @@ paths:
               schema: 
                 type: string
                 format: uri
+        "401":
+          $ref: '#/components/responses/UnauthorizedResponse'
         "409":
           description: Conflict
   /books/{bookId}:
@@ -181,9 +186,21 @@ components:
       required: 
         - name
         - releaseDate
+  headers:
+    UnauthorizedHeader:
+      schema: 
+        type: string
+        enum:
+          - Basic
+          - Bearer
   responses:
     BookNotFound:
       description: Book not found
+    UnauthorizedResponse:
+      description: HTTP Security failed
+      headers:
+        WWW-Authenticate:
+          $ref: "#/components/headers/UnauthorizedHeader"
   requestBodies:
     BookRequest:
       description: Book request
@@ -195,4 +212,8 @@ components:
     GlobalSecurity:
       type: http
       description: Global security for all the endpoints
-      scheme: Basic 
+      scheme: Basic
+    ApiKeySecurity:
+      type: apiKey
+      name: Api-Key
+      in: header
