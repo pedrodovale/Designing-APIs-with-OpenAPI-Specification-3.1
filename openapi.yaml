@@ -109,3 +109,92 @@ paths:
                 format: uri
         "409":
           description: Conflict
+  /books/{bookId}:
+    parameters: 
+      - name: bookId
+        in: path
+        schema: 
+          type: string
+        required: true
+    get:
+      operationId: getBookInfo
+      summary: Retrieve info about a book
+      parameters: 
+        - name: fetchAuthor
+          in: query
+          schema: 
+            type: boolean
+          required: false
+        - name: Accept-Language
+          in: header
+          schema: 
+            type: string
+          required: false
+        - name: SessionId
+          in: cookie
+          schema: 
+            type: string
+      responses: 
+        "200":
+          description: OK
+          content: 
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  name:
+                    minLength: 2
+                    maxLength: 100
+                    type: string
+                  releaseDate:
+                    type: string
+                    format: date
+                  category:
+                    type: string
+                    enum:
+                      - ROMANCE
+                      - FICTION
+                      - TECHNICAL
+                      - HISTORY
+                  translatedLanguages:
+                    type: array
+                    minItems: 1
+                    maxItems: 7200
+                    uniqueItems: true
+                    pattern: "[a-z]{2}-[A-Z]{2}"
+                    examples:
+                      - en-US
+                      - fr-BE
+                      - de-LU
+                    items: 
+                      type: string
+                  editionNumber:
+                    minimum: 1
+                    type: integer
+                  author:
+                    type: object
+                    properties:
+                      authorId:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                        default: John Doe
+                      email:
+                        type: string
+                        format: email
+                      website:
+                        type: string
+                        format: uri
+                    required: 
+                      -  authorId
+                  price:
+                    format: double
+                    type: number
+                  hardcoverEdition:
+                    type: boolean
+                required: 
+                  - name
+                  - releaseDate
+        "404":
+          description: Book not found  
