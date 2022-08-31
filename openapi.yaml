@@ -127,6 +127,8 @@ paths:
       summary: Update a Book
       tags: 
         - books
+      security: 
+        - MutualTlsSecurity: []
       requestBody: 
         $ref: "#/components/requestBodies/BookRequest"
         description: Book update request
@@ -238,3 +240,6 @@ components:
     OidcSecurity:
       type: openIdConnect
       openIdConnectUrl: https://auth.bookshelf.com
+    MutualTlsSecurity:
+      type: mutualTLS
+      description: the client present a valid certificate
