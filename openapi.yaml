@@ -122,6 +122,11 @@ paths:
             application/json:
               schema: 
                 $ref: "#/components/schemas/Book"
+              examples:
+                AStudyInScarletHistory:
+                  $ref: "#/components/examples/AnHistoryBook"
+                AStudyInScarletRomance:
+                  $ref: "#/components/examples/ARomanceBook"
         "401":
           description: OAuth2 Security failed
           $ref: '#/components/responses/UnauthorizedResponse'
@@ -288,8 +293,10 @@ components:
           uniqueItems: true
           pattern: "[a-z]{2}-[A-Z]{2}"
           examples:
-            - en-US
-            - fr-BE
+            - ["en-US", "en-GB"]
+            - 
+              - fr-BE
+              - fr-LU
             - de-LU
           items: 
             type: string
@@ -379,6 +386,11 @@ components:
         application/json: 
           schema: 
             $ref: "#/components/schemas/Book"
+          examples:
+            AStudyInScarletHistory:
+              $ref: "#/components/examples/AnHistoryBook"
+            AStudyInScarletRomance:
+              $ref: "#/components/examples/ARomanceBook"
   securitySchemes:
     GlobalSecurity:
       type: http
@@ -403,3 +415,40 @@ components:
     MutualTlsSecurity:
       type: mutualTLS
       description: the client present a valid certificate
+  examples:
+    AnHistoryBook:
+      summary: An history book
+      description: An example of a history book called "A Study in Scarlet"
+      value:
+        name: "A Study in Scarlet"
+        releaseDate: "1887-12-01"
+        translatedLanguages: ["en-US"]
+        editionNumber: 1
+        author:
+          authorId:
+          name: "Arthur Conan Doyle"
+          email: "author@mail.com"
+          website: "https://example.com"
+        price: 15.0
+        hardcoverEdition: true
+        bookType: history
+        historicPeriod: 1887
+    ARomanceBook:
+      summary: A romance book
+      description: An example of a romance book called "A Study in Scarlet"
+      value:
+        name: "A Study in Scarlet"
+        releaseDate: "1887-12-01"
+        translatedLanguages: ["en-US"]
+        editionNumber: 1
+        author:
+          authorId:
+          name: "Arthur Conan Doyle"
+          email: "author@mail.com"
+          website: "https://example.com"
+        price: 15.0
+        hardcoverEdition: true
+        bookType: romance
+        filmAdaptation:
+          yearOfRelease: 1914
+          directedBy: "G. B. Samuelson"
