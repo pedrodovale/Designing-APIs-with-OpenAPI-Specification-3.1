@@ -162,8 +162,15 @@ paths:
           $ref: "#/components/responses/BookNotFound"
   /books/upload-cover:
     servers: 
-      - url: https://storage-eu.bookshelf.com
+      - url: https://storage-{region}.bookshelf.com
         description: The Storage Backend
+        variables:
+          region:
+            description: The region where the data center is located
+            default: eu
+            enum: 
+              - eu
+              - us
     post: 
       operationId: uploadCover
       summary: Upload a book cover to the storage
