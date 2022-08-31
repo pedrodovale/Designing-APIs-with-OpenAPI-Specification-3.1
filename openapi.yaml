@@ -47,65 +47,7 @@ paths:
       tags: 
         - books
       requestBody: 
-        content: 
-          application/json: 
-            schema: 
-              type: object
-              properties:
-                name:
-                  minLength: 2
-                  maxLength: 100
-                  type: string
-                releaseDate:
-                  type: string
-                  format: date
-                category:
-                  type: string
-                  enum:
-                    - ROMANCE
-                    - FICTION
-                    - TECHNICAL
-                    - HISTORY
-                translatedLanguages:
-                  type: array
-                  minItems: 1
-                  maxItems: 7200
-                  uniqueItems: true
-                  pattern: "[a-z]{2}-[A-Z]{2}"
-                  examples:
-                    - en-US
-                    - fr-BE
-                    - de-LU
-                  items: 
-                    type: string
-                editionNumber:
-                  minimum: 1
-                  type: integer
-                author:
-                  type: object
-                  properties:
-                    authorId:
-                      type: string
-                      format: uuid
-                    name:
-                      type: string
-                      default: John Doe
-                    email:
-                      type: string
-                      format: email
-                    website:
-                      type: string
-                      format: uri
-                  required: 
-                    -  authorId
-                price:
-                  format: double
-                  type: number
-                hardcoverEdition:
-                  type: boolean
-              required: 
-                - name
-                - releaseDate
+        $ref: "#/components/requestBodies/BookRequest"
       responses: 
         "201":
           description: Created
@@ -149,64 +91,9 @@ paths:
           content: 
             application/json:
               schema: 
-                type: object
-                properties:
-                  name:
-                    minLength: 2
-                    maxLength: 100
-                    type: string
-                  releaseDate:
-                    type: string
-                    format: date
-                  category:
-                    type: string
-                    enum:
-                      - ROMANCE
-                      - FICTION
-                      - TECHNICAL
-                      - HISTORY
-                  translatedLanguages:
-                    type: array
-                    minItems: 1
-                    maxItems: 7200
-                    uniqueItems: true
-                    pattern: "[a-z]{2}-[A-Z]{2}"
-                    examples:
-                      - en-US
-                      - fr-BE
-                      - de-LU
-                    items: 
-                      type: string
-                  editionNumber:
-                    minimum: 1
-                    type: integer
-                  author:
-                    type: object
-                    properties:
-                      authorId:
-                        type: string
-                        format: uuid
-                      name:
-                        type: string
-                        default: John Doe
-                      email:
-                        type: string
-                        format: email
-                      website:
-                        type: string
-                        format: uri
-                    required: 
-                      -  authorId
-                  price:
-                    format: double
-                    type: number
-                  hardcoverEdition:
-                    type: boolean
-                required: 
-                  - name
-                  - releaseDate
+                $ref: "#/components/schemas/Book"
         "404":
-          description: Book not found
+          $ref: "#/components/responses/BookNotFound"
     delete: 
       operationId: removeBook
       summary: Removes a Book
@@ -217,4 +104,87 @@ paths:
         "200":
           description: OK
         "404":
-          description: Book not found      
+          $ref: "#/components/responses/BookNotFound"
+    put:
+      operationId: updateBook
+      summary: Update a Book
+      tags: 
+        - books
+      requestBody: 
+        $ref: "#/components/requestBodies/BookRequest"
+        description: Book update request
+      responses: 
+        "200":
+          description: OK
+        "404":
+          $ref: "#/components/responses/BookNotFound"
+components: 
+  schemas:
+    Book:
+      type: object
+      properties:
+        name:
+          minLength: 2
+          maxLength: 100
+          type: string
+        releaseDate:
+          type: string
+          format: date
+        category:
+          type: string
+          enum:
+            - ROMANCE
+            - FICTION
+            - TECHNICAL
+            - HISTORY
+            - SCIENCE FICTION
+        translatedLanguages:
+          type: array
+          minItems: 1
+          maxItems: 7200
+          uniqueItems: true
+          pattern: "[a-z]{2}-[A-Z]{2}"
+          examples:
+            - en-US
+            - fr-BE
+            - de-LU
+          items: 
+            type: string
+        editionNumber:
+          minimum: 1
+          type: integer
+        author:
+          type: object
+          properties:
+            authorId:
+              type: string
+              format: uuid
+            name:
+              type: string
+              default: John Doe
+            email:
+              type: string
+              format: email
+            website:
+              type: string
+              format: uri
+          required: 
+            -  authorId
+        price:
+          format: double
+          type: number
+        hardcoverEdition:
+          type: boolean
+      required: 
+        - name
+        - releaseDate
+  responses:
+    BookNotFound:
+      description: Book not found
+  requestBodies:
+    BookRequest:
+      description: Book request
+      content: 
+        application/json: 
+          schema: 
+            $ref: "#/components/schemas/Book"
