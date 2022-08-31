@@ -32,7 +32,7 @@ webhooks:
         - name: Location
           in: header
           schema: 
-            $ref: "#/components/schemas/Location"
+            $ref: "components/schemas/location.yaml"
 paths:
   /books:
     get:
@@ -76,7 +76,7 @@ paths:
           headers:
             Location:
               schema: 
-                $ref: "#/components/schemas/Location"
+                $ref: "components/schemas/location.yaml"
           links:
             GetBook:
               operationId: getBookInfo
@@ -163,84 +163,7 @@ paths:
         "404":
           $ref: "#/components/responses/BookNotFound"
   /books/upload-cover:
-    servers: 
-      - url: https://storage-{region}.bookshelf.com
-        description: The Storage Backend
-        variables:
-          region:
-            description: The region where the data center is located
-            default: eu
-            enum: 
-              - eu
-              - us
-    post: 
-      operationId: uploadCover
-      summary: Upload a book cover to the storage
-      tags: 
-        - books
-      requestBody: 
-        content:
-          img/png:
-            schema: 
-              type: string
-              contentEncoding: base64
-          multipart/form-data:
-            schema: 
-              type: object
-              properties:
-                file:
-                  type: string
-                  contentEncoding: base64
-                bookId:
-                  type: string
-                editionNumber:
-                  type: string
-                successUrl:
-                  type: string
-                  format: uri
-                failedUrl:
-                  type: string
-                  format: uri
-      responses: 
-        "200":
-          description: Upload request complete
-        "400":
-          description: Bad Request
-        "522":
-          description: Timeout
-        "401":
-          description: OAuth2 Security failed
-          $ref: '#/components/responses/UnauthorizedResponse' 
-      callbacks:
-        uploadFinished:
-          $request.body#/successUrl:
-            get: 
-              operationId: uploadSuccess
-              summary: Callback for a successful book cover upload
-              security: 
-                - GlobalSecurity: []
-              parameters: 
-                - name: Location
-                  in: header
-                  schema:
-                    $ref: "#/components/schemas/Location"
-        uploadFailed:
-          $request.body#/failedUrl:
-            post:
-              operationId: uploadFailed
-              summary: Callback for a failed book cover upload
-              requestBody: 
-                content:
-                  application/json:
-                    schema: 
-                      type: object
-                      properties:
-                        error:
-                          type: string
-                          enum:
-                            - max_size_exceeded
-                        errorDescription:
-                          type: string
+    $ref: "#/components/pathItems/UploadCover"
   /books/subscribe:
     post: 
       operationId: subscribeNewBook
@@ -370,9 +293,6 @@ components:
                     producedBy:
                       not:
                         type: boolean
-    Location:
-      type: string
-      format: uri
   headers:
     UnauthorizedHeader:
       schema: 
@@ -461,3 +381,58 @@ components:
         filmAdaptation:
           yearOfRelease: 1914
           directedBy: "G. B. Samuelson"
+  pathItems:
+    UploadCover:
+      servers: 
+        - url: https://storage-{region}.bookshelf.com
+          description: The Storage Backend
+          variables:
+            region:
+              description: The region where the data center is located
+              default: eu
+              enum: 
+                - eu
+                - us
+      post: 
+        operationId: uploadCover
+        summary: Upload a book cover to the storage
+        tags: 
+          - books
+        requestBody: 
+          content:
+            img/png:
+              schema: 
+                type: string
+                contentEncoding: base64
+            multipart/form-data:
+              schema: 
+                type: object
+                properties:
+                  file:
+                    type: string
+                    contentEncoding: base64
+                  bookId:
+                    type: string
+                  editionNumber:
+                    type: string
+                  successUrl:
+                    type: string
+                    format: uri
+                  failedUrl:
+                    type: string
+                    format: uri
+        responses: 
+          "200":
+            description: Upload request complete
+          "400":
+            description: Bad Request
+          "522":
+            description: Timeout
+          "401":
+            description: OAuth2 Security failed
+            $ref: '#/components/responses/UnauthorizedResponse' 
+        callbacks:
+          uploadFinished:
+            $ref: "components/callbacks/upload-finished.yaml"
+          uploadFailed:
+            $ref: "components/callbacks/upload-failed.yaml"

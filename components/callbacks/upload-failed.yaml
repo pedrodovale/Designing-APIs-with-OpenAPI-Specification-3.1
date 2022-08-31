@@ -1,0 +1,16 @@
+$request.body#/failedUrl:
+  post:
+    operationId: uploadFailed
+    summary: Callback for a failed book cover upload
+    requestBody: 
+      content:
+        application/json:
+          schema: 
+            type: object
+            properties:
+              error:
+                type: string
+                enum:
+                  - max_size_exceeded
+              errorDescription:
+                type: string

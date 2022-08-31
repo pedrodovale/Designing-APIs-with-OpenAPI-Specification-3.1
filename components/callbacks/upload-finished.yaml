@@ -1,0 +1,11 @@
+$request.body#/successUrl:
+  get: 
+    operationId: uploadSuccess
+    summary: Callback for a successful book cover upload
+    security: 
+      - GlobalSecurity: []
+    parameters: 
+      - name: Location
+        in: header
+        schema:
+          $ref: "../schemas/location.yaml"
