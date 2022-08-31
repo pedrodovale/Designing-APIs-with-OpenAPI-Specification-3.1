@@ -62,6 +62,11 @@ paths:
               schema: 
                 type: string
                 format: uri
+          links:
+            GetBook:
+              operationId: getBookInfo
+              parameters:
+                url: $response.header.location
         "401":
           $ref: '#/components/responses/UnauthorizedResponse'
         "409":
