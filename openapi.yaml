@@ -78,6 +78,10 @@ paths:
       summary: Retrieve info about a book
       tags: 
         - books
+      security: 
+        - OAuthSecurity:
+          - books:read
+        - GlobalSecurity: []
       parameters: 
         - name: fetchAuthor
           in: query
@@ -100,6 +104,9 @@ paths:
             application/json:
               schema: 
                 $ref: "#/components/schemas/Book"
+        "401":
+          description: OAuth2 Security failed
+          $ref: '#/components/responses/UnauthorizedResponse'
         "404":
           $ref: "#/components/responses/BookNotFound"
     delete: 
@@ -217,3 +224,12 @@ components:
       type: apiKey
       name: Api-Key
       in: header
+    OAuthSecurity:
+      type: oauth2
+      flows: 
+        authorizationCode: 
+          authorizationUrl: https://auth.bookshelf.com/authorize
+          tokenUrl: https://auth.bookshelf.com/access_token
+          scopes:
+            books:read: Operations on books that do not change the bookshelf
+            books:write: Operations on books to make changes to the bookshelf
