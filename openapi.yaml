@@ -15,6 +15,8 @@ servers:
 tags: 
   - name: books
     description: Operations on books
+security: 
+  - {}
 paths:
   /books:
     get:
@@ -188,3 +190,4 @@ components:
         application/json: 
           schema: 
             $ref: "#/components/schemas/Book"
+  securitySchemes: {}
