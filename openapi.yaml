@@ -7,6 +7,8 @@ info:
   license: 
     name: MIT
     url: https://opensource.org/licenses/MIT
+  x-logo:
+    url: https://cdn.iconscout.com/icon/free/png-256/healthy-reading-2130817-1794962.png
 servers: 
   - url: http://api.bookshelf.com
     description: The Production Server
