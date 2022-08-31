@@ -12,11 +12,16 @@ servers:
     description: The Production Server
   - url: http://playground.api.bookshelf.com 
     description: The test server where you can play around
+tags: 
+  - name: books
+    description: Operations on books
 paths:
   /books:
     get:
       operationId: listBooks
       summary: List all books
+      tags: 
+        - public
       responses: 
         "200":
           description: OK
@@ -39,6 +44,8 @@ paths:
     post:
       operationId: addBook
       summary: Add a new book
+      tags: 
+        - books
       requestBody: 
         content: 
           application/json: 
@@ -119,6 +126,8 @@ paths:
     get:
       operationId: getBookInfo
       summary: Retrieve info about a book
+      tags: 
+        - books
       parameters: 
         - name: fetchAuthor
           in: query
@@ -197,4 +206,15 @@ paths:
                   - name
                   - releaseDate
         "404":
-          description: Book not found  
+          description: Book not found
+    delete: 
+      operationId: removeBook
+      summary: Removes a Book
+      description: "~Removes~ the info about **a book** and all *related data* `permanently`"
+      tags: 
+        - books
+      responses: 
+        "200":
+          description: OK
+        "404":
+          description: Book not found      
